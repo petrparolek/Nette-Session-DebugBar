@@ -61,7 +61,7 @@
             <tbody>
             <?php foreach ($sections as $section): ?><tr>
                 <td class="title" width="10%"><?php echo $esc($section->title); ?></td>
-                <td><?php echo $click($section->data, TRUE); ?></td>
+                <td><?php echo $click($section->data); ?></td>
                 <td width="5%"><?php echo $esc($section->expiration); ?></td>
                 <td width="1%" class="remove"><a href="<?php echo $esc($del($section->title)); ?>"><b>×</b></a></td>
             </tr><?php endforeach; ?>

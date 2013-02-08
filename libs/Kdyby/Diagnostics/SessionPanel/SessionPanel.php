@@ -185,7 +185,6 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 
 	/**
 	 * @param int $seconds
-	 *
 	 * @return string
 	 */
 	public static function time($seconds)
@@ -194,9 +193,11 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 		static $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
 
 		$difference = $seconds > Nette\DateTime::YEAR ? time() - $seconds : $seconds;
-		for ($j = 0; $difference >= $lengths[$j]; $j++) $difference /= $lengths[$j];
-		if (($difference = round($difference)) != 1) $periods[$j] .= "s";
-		return "$difference {$periods[$j]}";
+		for ($j = 0; $difference >= $lengths[$j]; $j++) {
+			$difference /= $lengths[$j];
+		}
+		$multiply = ($difference = round($difference)) != 1;
+		return "$difference {$periods[$j]}" . ($multiply ? 's' : '');
 	}
 
 }

@@ -17,36 +17,30 @@ use Nette\Iterators\Filter;
  */
 class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 {
+
 	const SIGNAL = 'nette-session-panel-delete-session';
 
-	/**
-	 * @var \Nette\Http\Session
-	 */
+	/** @var \Nette\Http\Session */
 	private $session;
 
-	/**
-	 * @var \Nette\Http\UrlScript
-	 */
+	/** @var \Nette\Http\UrlScript */
 	private $url;
 
-	/**
-	 * @var array
-	 */
-	private $hiddenSections = array(
-		'Nette.Http.UserStorage/'
-	);
+	/** @var string[] */
+	private $hiddenSections;
 
 
 
 	/**
 	 * @param \Nette\Http\Session $session
-	 * @param Request $httpRequest
+	 * @param \Nette\Http\Request $httpRequest
 	 */
 	public function __construct(Nette\Http\Session $session, Request $httpRequest)
 	{
 		$this->session = $session;
 		$this->url = clone $httpRequest->url;
 		$this->processSignal($httpRequest);
+		$this->hiddenSections = array();
 	}
 
 

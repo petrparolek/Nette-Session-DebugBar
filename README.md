@@ -12,14 +12,13 @@ Simple DebugBar to show contents of session.
 To load SessionPanel into the DebugBar insert following code into config.neon.
 ```neon
 extensions:
-	debugger.session: Kdyby\Diagnostics\SessionPanel\SessionPanelExtension
+	debugger.session: Kdyby\SessionPanel\DI\SessionPanelExtension
 ```
 
-You can also specify a section to hide in the DebugBar by add setup section in service definition.
+You can also specify sections to hide in the DebugBar.
 ```neon
-services:
-	debugger.session.panel:
-		setup:
-			- hideSection('Nette.Http.UserStorage/')
-			- hideSection('Nette.Forms.Form/CSRF')
+debugger.session:
+	hiddenSections:
+		- 'Nette.Http.UserStorage/'
+		- 'Nette.Forms.Form/CSRF'
 ```

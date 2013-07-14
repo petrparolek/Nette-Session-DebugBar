@@ -1,30 +1,35 @@
 {
-    "name":"kdyby/nette-session-panel",
-    "description":"Nette DebugBar panel, that allows you inspect your sessions.",
-    "keywords":["nette", "session", "panel"],
-    "license":["BSD-3", "GPLv2", "GPLv3"],
-    "homepage":"http://kdyby.org",
-    "authors":[
+    "name": "kdyby/nette-session-panel",
+    "description": "Nette DebugBar panel, that allows you inspect your sessions.",
+    "keywords": ["nette", "session", "panel"],
+    "license": ["BSD-3", "GPLv2", "GPLv3"],
+    "homepage": "http://kdyby.org",
+    "authors": [
         {
-            "name":"Filip Procházka",
-            "homepage":"http://filip-prochazka.com/"
+            "name": "Filip Procházka",
+            "homepage": "http://filip-prochazka.com/"
         },
         {
-            "name":"Pavel Železný",
-            "homepage":"http://pavelzelezny.cz/"
-        }
+            "name": "Pavel Železný",
+            "homepage": "http://pavelzelezny.cz/"
+        },
+		{
+			"name": "Jáchym Toušek",
+			"homepage": "http://enumag.cz",
+			"email": "enumag@gmail.com"
+		}
     ],
-    "support":{
-        "email":"hosiplan@kdyby.org",
-        "issues":"https://github.com/HosipLan/Nette-Session-DebugBar/issues"
+    "support": {
+        "email": "enumag@gmail.com",
+        "issues": "https://github.com/HosipLan/Nette-Session-DebugBar/issues"
     },
-    "require":{
-        "php":">=5.3.2",
-        "nette/nette":"*"
+    "require": {
+        "php": ">=5.3.2",
+        "nette/nette": "@dev"
     },
-    "autoload":{
-        "psr-0":{
-            "Kdyby":"src/"
+    "autoload": {
+        "psr-0": {
+            "Kdyby": "src/"
         }
     }
 }

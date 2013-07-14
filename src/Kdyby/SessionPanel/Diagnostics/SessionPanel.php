@@ -1,6 +1,6 @@
 <?php
 
-namespace Kdyby\Diagnostics\SessionPanel;
+namespace Kdyby\SessionPanel\Diagnostics;
 
 use Nette;
 use Nette\Http\Request;

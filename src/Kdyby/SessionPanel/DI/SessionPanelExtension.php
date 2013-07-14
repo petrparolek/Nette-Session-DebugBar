@@ -1,6 +1,6 @@
 <?php
 
-namespace Kdyby\Diagnostics\SessionPanel;
+namespace Kdyby\SessionPanel\DI;
 
 use Nette;
 
@@ -24,7 +24,7 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		if ($builder->parameters['debugMode']) {
 			$builder->addDefinition($this->prefix('panel'))
-				->setClass('Kdyby\Diagnostics\SessionPanel\SessionPanel');
+				->setClass('Kdyby\SessionPanel\Diagnostics\SessionPanel');
 		}
 	}
 

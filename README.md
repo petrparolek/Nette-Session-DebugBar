@@ -1,19 +1,30 @@
 # Nette Session panel
 
-## Requirements ##
+## Requirements
 
-[Nette Framework 2.1](http://nette.org) or higher and PHP 5.3 or higher.
+[Nette Framework 2.0](http://nette.org) or higher and PHP 5.3 or higher.
 
-## Documentation ##
+## Documentation
 Simple DebugBar to show contents of session.
 
-## Examples ##
+## Installation
+
+### Nette 2.1
 
 To load SessionPanel into the DebugBar insert following code into config.neon.
-```neon
+```yml
 extensions:
 	debugger.session: Kdyby\SessionPanel\DI\SessionPanelExtension
 ```
+
+### Nette 2.0
+
+To load SessionPanel into the DebugBar insert following code into bootstrap.php.
+```php
+Kdyby\SessionPanel\DI\SessionPanelExtension::register($confgurator);
+```
+
+## Configuration
 
 You can also specify sections to hide in the DebugBar.
 ```neon

@@ -26,9 +26,6 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	/** @var \Nette\Http\UrlScript */
 	private $url;
 
-	/** @var string[] */
-	private $hiddenSections;
-
 
 
 	/**
@@ -40,7 +37,6 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 		$this->session = $session;
 		$this->url = clone $httpRequest->url;
 		$this->processSignal($httpRequest);
-		$this->hiddenSections = array();
 	}
 
 
@@ -72,17 +68,6 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 		$response = new Nette\Http\Response();
 		$response->redirect($this->url);
 		exit(0);
-	}
-
-
-
-	/**
-	 * Add section name in list of hidden
-	 * @param string $sectionName
-	 */
-	public function hideSection($sectionName)
-	{
-		$this->hiddenSections[] = $sectionName;
 	}
 
 
@@ -140,10 +125,7 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	 */
 	protected function createSessionIterator()
 	{
-		$hidden = $this->hiddenSections;
-		$sections = new Filter($this->session->getIterator(), function ($sectionName) use ($hidden) {
-			return !in_array($sectionName, $hidden);
-		});
+		$sections = $this->session->getIterator();
 		return new Mapper($sections, function ($sectionName) {
 			$data = $_SESSION['__NF']['DATA'][$sectionName];
 

@@ -29,13 +29,3 @@ To load SessionPanel into the DebugBar insert following code into bootstrap.php.
 ```php
 Kdyby\SessionPanel\DI\SessionPanelExtension::register($confgurator);
 ```
-
-## Configuration
-
-You can also specify sections to hide in the DebugBar.
-```neon
-debugger.session:
-	hiddenSections:
-		- 'Nette.Http.UserStorage/'
-		- 'Nette.Forms.Form/CSRF'
-```

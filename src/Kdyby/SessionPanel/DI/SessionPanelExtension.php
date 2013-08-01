@@ -27,26 +27,12 @@ if (isset(Nette\Loaders\NetteLoader::getInstance()->renamed['Nette\Configurator'
 class SessionPanelExtension extends Nette\DI\CompilerExtension
 {
 
-	/** @var array */
-	public $defaults = array(
-		'hiddenSections' => array(),
-	);
-
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
-		$config = $this->getConfig($this->defaults);
-
 		if ($builder->parameters['debugMode']) {
 			$builder->addDefinition($this->prefix('panel'))
 				->setClass('Kdyby\SessionPanel\Diagnostics\SessionPanel');
-
-			Nette\Utils\Validators::assertField($config, 'hiddenSections', 'array');
-
-			foreach ($config['hiddenSections'] as $section) {
-				$builder->getDefinition($this->prefix('panel'))
-					->addSetup('hideSection', array($section));
-			}
 		}
 	}
 
@@ -61,9 +47,6 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 		}
 	}
 
-	/**
-	 * @param \Nette\Configurator $configurator
-	 */
 	public static function register(Nette\Configurator $configurator)
 	{
 		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {

@@ -5,7 +5,6 @@ namespace Kdyby\SessionPanel\Diagnostics;
 use Nette;
 use Nette\Http\Request;
 use Nette\Iterators\Mapper;
-use Nette\Iterators\Filter;
 
 
 
@@ -19,6 +18,9 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 {
 
 	const SIGNAL = 'nette-session-panel-delete-session';
+	const SECTION_TYPE = 'section-type';
+	const NETTE_SESSION = 'nette-session';
+	const PHP_SESSION = 'php-session';
 
 	/** @var \Nette\Http\Session */
 	private $session;
@@ -55,14 +57,17 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 		}
 
 		if ($section = $httpRequest->getQuery(self::SIGNAL)) {
-			$this->session->getSection($section)->remove();
-
+			if ($httpRequest->getQuery(self::SECTION_TYPE) == self::PHP_SESSION) {
+				unset($_SESSION[$section]);
+			} elseif ($httpRequest->getQuery(self::SECTION_TYPE) == self::NETTE_SESSION) {
+				$this->session->getSection($section)->remove();
+			}
 		} else {
 			$this->session->destroy();
 		}
 
 		$query = $httpRequest->getQuery();
-		unset($query['do'], $query[self::SIGNAL]);
+		unset($query['do'], $query[self::SIGNAL], $query[self::SECTION_TYPE]);
 		$this->url->setQuery($query);
 
 		$response = new Nette\Http\Response();
@@ -105,11 +110,12 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 					return Nette\Diagnostics\Helpers::clickableDump($variable, TRUE);
 				}
 			}),
-			'del' => function ($section = NULL) use ($url) {
+			'del' => function ($section = NULL, $sectionType = NULL) use ($url) {
 				$url = clone $url;
 				$url->appendQuery(array(
 					'do' => SessionPanel::SIGNAL,
 					SessionPanel::SIGNAL => $section,
+					SessionPanel::SECTION_TYPE => $sectionType,
 				));
 				return (string)$url;
 			},
@@ -119,11 +125,43 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	}
 
 
+	/**
+	 * @return \AppendIterator
+	 */
+	protected function createSessionIterator(){
+		$iterator = new \AppendIterator();
+		$iterator->append($this->createNetteSessionIterator());
+		$iterator->append($this->createPhpSessionIterator());
+		return $iterator;
+	}
+
 
 	/**
 	 * @return \Iterator
 	 */
-	protected function createSessionIterator()
+	protected function createPhpSessionIterator()
+	{
+		$section = array();
+
+		foreach ($_SESSION as $sectionName => $data) {
+			if ($sectionName === '__NF') continue;
+
+			$section[] = (object)array(
+				'title' => $sectionName,
+				'data' => $data,
+				'expiration' => 'inherited',
+				'sectionType' => SessionPanel::PHP_SESSION
+			);
+		};
+
+		return new \ArrayIterator($section);
+	}
+
+
+	/**
+	 * @return \Iterator
+	 */
+	protected function createNetteSessionIterator()
 	{
 		$sections = $this->session->getIterator();
 		return new Mapper($sections, function ($sectionName) {
@@ -132,7 +170,8 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 			$section = (object)array(
 				'title' => $sectionName,
 				'data' => $data,
-				'expiration' => 'inherited'
+				'expiration' => 'inherited',
+				'sectionType' => SessionPanel::NETTE_SESSION
 			);
 
 			$meta = isset($_SESSION['__NF']['META'][$sectionName])

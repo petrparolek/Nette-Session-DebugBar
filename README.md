@@ -27,5 +27,5 @@ extensions:
 
 To load SessionPanel into the DebugBar insert following code into bootstrap.php.
 ```php
-Kdyby\SessionPanel\DI\SessionPanelExtension::register($confgurator);
+Kdyby\SessionPanel\DI\SessionPanelExtension::register($configurator);
 ```

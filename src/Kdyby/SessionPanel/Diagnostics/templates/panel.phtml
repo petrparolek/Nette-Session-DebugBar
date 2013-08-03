@@ -24,8 +24,13 @@
 	white-space: nowrap;
 }
 
-#nette-debug .nette-sessionPanel td.title {
+#nette-debug .nette-sessionPanel td.nette-session {
 	font-weight: bold;
+}
+
+#nette-debug .nette-sessionPanel .section-type {
+	font-size: 85%;
+	color: #999;
 }
 
 #nette-debug .nette-sessionPanel .remove b {
@@ -61,10 +66,15 @@
 			<tbody>
 			<?php foreach ($sections as $section): ?>
 				<tr>
-				<td class="title" width="10%"><?php echo $esc($section->title); ?></td>
-				<td><?php echo $click($section->data); ?></td>
-				<td width="5%"><?php echo $esc($section->expiration); ?></td>
-				<td width="1%" class="remove"><a href="<?php echo $esc($del($section->title)); ?>"><b>×</b></a></td>
+					<td class="title <?php echo $section->sectionType; ?>" width="10%">
+						<?php echo $esc($section->title); ?>
+						<?php if ($section->sectionType == 'php-session'): ?>
+							<span class="section-type">php section</span>
+						<?php endif; ?>
+					</td>
+					<td><?php echo $click($section->data); ?></td>
+					<td width="5%"><?php echo $esc($section->expiration); ?></td>
+					<td width="1%" class="remove"><a href="<?php echo $esc($del($section->title, $section->sectionType)); ?>"><b>×</b></a></td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>

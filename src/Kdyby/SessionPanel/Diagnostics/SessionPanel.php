@@ -87,7 +87,7 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 			'src' => function ($file) {
 				return Nette\Templating\Helpers::dataStream(file_get_contents($file));
 			},
-			'esc' => callback('Nette\Templating\Helpers::escapeHtml')
+			'esc' => callback('Nette\Templating\Helpers::escapeHtml'),
 		));
 	}
 
@@ -117,10 +117,10 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 					SessionPanel::SIGNAL => $section,
 					SessionPanel::SECTION_TYPE => $sectionType,
 				));
-				return (string)$url;
+				return (string) $url;
 			},
 			'sections' => $this->createSessionIterator(),
-			'sessionMaxTime' => $this->session->options['gc_maxlifetime']
+			'sessionMaxTime' => $this->session->options['gc_maxlifetime'],
 		));
 	}
 
@@ -141,7 +141,7 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	 */
 	protected function createPhpSessionIterator()
 	{
-		$section = array();
+		$sections = array();
 
 		if ($this->session->exists()) {
 			$this->session->start();
@@ -149,16 +149,16 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 			foreach ($_SESSION as $sectionName => $data) {
 				if ($sectionName === '__NF') continue;
 	
-				$section[] = (object)array(
+				$sections[] = (object) array(
 					'title' => $sectionName,
 					'data' => $data,
 					'expiration' => 'inherited',
-					'sectionType' => SessionPanel::PHP_SESSION
+					'sectionType' => SessionPanel::PHP_SESSION,
 				);
 			};
 		}
 
-		return new \ArrayIterator($section);
+		return new \ArrayIterator($sections);
 	}
 
 
@@ -168,14 +168,15 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	protected function createNetteSessionIterator()
 	{
 		$sections = $this->session->getIterator();
+		
 		return new Mapper($sections, function ($sectionName) {
 			$data = $_SESSION['__NF']['DATA'][$sectionName];
 
-			$section = (object)array(
+			$section = (object) array(
 				'title' => $sectionName,
 				'data' => $data,
 				'expiration' => 'inherited',
-				'sectionType' => SessionPanel::NETTE_SESSION
+				'sectionType' => SessionPanel::NETTE_SESSION,
 			);
 
 			$meta = isset($_SESSION['__NF']['META'][$sectionName])

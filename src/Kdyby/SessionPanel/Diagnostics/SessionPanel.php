@@ -143,16 +143,20 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	{
 		$section = array();
 
-		foreach ($_SESSION as $sectionName => $data) {
-			if ($sectionName === '__NF') continue;
+		if ($this->session->exists()) {
+			$this->session->start();
 
-			$section[] = (object)array(
-				'title' => $sectionName,
-				'data' => $data,
-				'expiration' => 'inherited',
-				'sectionType' => SessionPanel::PHP_SESSION
-			);
-		};
+			foreach ($_SESSION as $sectionName => $data) {
+				if ($sectionName === '__NF') continue;
+	
+				$section[] = (object)array(
+					'title' => $sectionName,
+					'data' => $data,
+					'expiration' => 'inherited',
+					'sectionType' => SessionPanel::PHP_SESSION
+				);
+			};
+		}
 
 		return new \ArrayIterator($section);
 	}

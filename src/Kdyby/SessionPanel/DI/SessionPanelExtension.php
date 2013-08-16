@@ -50,7 +50,7 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 	public static function register(Nette\Configurator $configurator)
 	{
 		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {
-			$compiler->addExtension('debugger.session', new static());
+			$compiler->addExtension('debugger.session', new SessionPanelExtension());
 		};
 	}
 

@@ -26,7 +26,7 @@ class SessionPanelExtension extends Nette\Config\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		if ($builder->parameters['debugMode']) {
 			$class->methods['initialize']->addBody($builder->formatPhp(
-				'Nette\Diagnostics\Debugger::' . (method_exists('Nette\Diagnostics\Debugger', 'getBar') ? 'getBar()' : '$bar') . '->addPanel(?);',
+				'Nette\Diagnostics\Debugger::$bar->addPanel(?);',
 				Nette\DI\Compiler::filterArguments(array(new Nette\DI\Statement($this->prefix('@panel'))))
 			));
 		}

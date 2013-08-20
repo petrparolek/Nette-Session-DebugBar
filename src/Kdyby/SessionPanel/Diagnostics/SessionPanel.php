@@ -104,11 +104,7 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 			'time' => callback(get_called_class() . '::time'),
 			'esc' => callback('Nette\Templating\Helpers::escapeHtml'),
 			'click' => callback(function ($variable) {
-				if (class_exists('Nette\Diagnostics\Dumper')) {
-					return Nette\Diagnostics\Dumper::toHtml($variable, array(Nette\Diagnostics\Dumper::COLLAPSE => TRUE));
-				} else {
-					return Nette\Diagnostics\Helpers::clickableDump($variable, TRUE);
-				}
+				return Nette\Diagnostics\Helpers::clickableDump($variable, TRUE);
 			}),
 			'del' => function ($section = NULL, $sectionType = NULL) use ($url) {
 				$url = clone $url;

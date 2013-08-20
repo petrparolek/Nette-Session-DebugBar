@@ -6,25 +6,10 @@ use Nette;
 
 
 
-if (!class_exists('Nette\DI\CompilerExtension')) {
-	class_alias('Nette\Config\CompilerExtension', 'Nette\DI\CompilerExtension');
-	class_alias('Nette\Config\Compiler', 'Nette\DI\Compiler');
-	class_alias('Nette\Config\Helpers', 'Nette\DI\Config\Helpers');
-}
-
-if (!class_exists('Nette\PhpGenerator\ClassType')) {
-	class_alias('Nette\Utils\PhpGenerator\ClassType', 'Nette\PhpGenerator\ClassType');	
-}
-
-if (isset(Nette\Loaders\NetteLoader::getInstance()->renamed['Nette\Configurator']) || !class_exists('Nette\Configurator')) {
-	unset(Nette\Loaders\NetteLoader::getInstance()->renamed['Nette\Configurator']);
-	class_alias('Nette\Config\Configurator', 'Nette\Configurator');
-}
-
 /**
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class SessionPanelExtension extends Nette\DI\CompilerExtension
+class SessionPanelExtension extends Nette\Config\CompilerExtension
 {
 
 	public function loadConfiguration()
@@ -36,7 +21,7 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 		}
 	}
 
-	public function afterCompile(Nette\PhpGenerator\ClassType $class)
+	public function afterCompile(Nette\Utils\PhpGenerator\ClassType $class)
 	{
 		$builder = $this->getContainerBuilder();
 		if ($builder->parameters['debugMode']) {
@@ -47,7 +32,7 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 		}
 	}
 
-	public static function register(Nette\Configurator $configurator)
+	public static function register(Nette\Config\Configurator $configurator)
 	{
 		$configurator->onCompile[] = function ($config, Nette\DI\Compiler $compiler) {
 			$compiler->addExtension('debugger.session', new SessionPanelExtension());

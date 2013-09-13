@@ -3,7 +3,7 @@
 namespace Kdyby\SessionPanel\Diagnostics;
 
 use Nette;
-use Nette\Http\Request;
+use Nette\Http\IRequest;
 use Nette\Iterators\Mapper;
 
 
@@ -32,9 +32,9 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 
 	/**
 	 * @param \Nette\Http\Session $session
-	 * @param \Nette\Http\Request $httpRequest
+	 * @param \Nette\Http\IRequest $httpRequest
 	 */
-	public function __construct(Nette\Http\Session $session, Request $httpRequest)
+	public function __construct(Nette\Http\Session $session, IRequest $httpRequest)
 	{
 		$this->session = $session;
 		$this->url = clone $httpRequest->url;
@@ -44,9 +44,9 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 
 
 	/**
-	 * @param \Nette\Http\Request $httpRequest
+	 * @param \Nette\Http\IRequest $httpRequest
 	 */
-	private function processSignal(Request $httpRequest)
+	private function processSignal(IRequest $httpRequest)
 	{
 		if ($httpRequest->getQuery('do') !== self::SIGNAL) {
 			return;

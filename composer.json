@@ -15,14 +15,10 @@
 		},
 		{
 			"name": "Jáchym Toušek",
-			"homepage": "http://enumag.cz",
+			"homepage": "http://enumag.cz/",
 			"email": "enumag@gmail.com"
 		}
 	],
-	"support": {
-		"email": "enumag@gmail.com",
-		"issues": "https://github.com/HosipLan/Nette-Session-DebugBar/issues"
-	},
 	"require": {
 		"php": ">=5.3.2",
 		"nette/nette": ">=2.0"

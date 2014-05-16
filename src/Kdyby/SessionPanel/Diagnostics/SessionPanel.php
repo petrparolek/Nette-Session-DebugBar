@@ -5,6 +5,32 @@ namespace Kdyby\SessionPanel\Diagnostics;
 use Nette;
 use Nette\Http\IRequest;
 use Nette\Iterators\Mapper;
+use Tracy;
+
+
+
+if (!class_exists('Tracy\Debugger')) {
+	class_alias('Nette\Diagnostics\Debugger', 'Tracy\Debugger');
+}
+
+if (!class_exists('Tracy\Dumper') && class_exists('Nette\Diagnostics\Dumper')) {
+	class_alias('Nette\Diagnostics\Dumper', 'Tracy\Dumper');
+}
+
+if (!class_exists('Tracy\Bar')) {
+	class_alias('Nette\Diagnostics\Bar', 'Tracy\Bar');
+	class_alias('Nette\Diagnostics\BlueScreen', 'Tracy\BlueScreen');
+	class_alias('Nette\Diagnostics\Helpers', 'Tracy\Helpers');
+	class_alias('Nette\Diagnostics\IBarPanel', 'Tracy\IBarPanel');
+}
+
+if (!class_exists('Latte\Runtime\Filters')) {
+	class_alias('Nette\Templating\Helpers', 'Latte\Runtime\Filters');
+}
+
+if (!class_exists('Nette\Utils\DateTime')) {
+	class_alias('Nette\DateTime', 'Nette\Utils\DateTime');
+}
 
 
 
@@ -14,7 +40,7 @@ use Nette\Iterators\Mapper;
  * @author Pavel Železný <info@pavelzelezny.cz>
  * @author Filip Procházka <email@filip-prochazka.cz>
  */
-class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
+class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 {
 
 	const SIGNAL = 'nette-session-panel-delete-session';
@@ -85,9 +111,9 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	{
 		return self::render(__DIR__ . '/templates/tab.phtml', array(
 			'src' => function ($file) {
-				return Nette\Templating\Helpers::dataStream(file_get_contents($file));
+				return \Latte\Runtime\Filters::dataStream(file_get_contents($file));
 			},
-			'esc' => callback('Nette\Templating\Helpers::escapeHtml'),
+			'esc' => callback('Latte\Runtime\Filters::escapeHtml'),
 		));
 	}
 
@@ -104,8 +130,8 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 			'time' => callback(get_called_class() . '::time'),
 			'esc' => callback('Nette\Templating\Helpers::escapeHtml'),
 			'click' => callback(function ($variable) {
-				if (class_exists('Nette\Diagnostics\Dumper')) {
-					return Nette\Diagnostics\Dumper::toHtml($variable, array(Nette\Diagnostics\Dumper::COLLAPSE => TRUE));
+				if (class_exists('Tracy\Dumper')) {
+					return Tracy\Dumper::toHtml($variable, array(Tracy\Dumper::COLLAPSE => TRUE));
 				} else {
 					return Nette\Diagnostics\Helpers::clickableDump($variable, TRUE);
 				}
@@ -202,9 +228,15 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 	 */
 	public static function render($file, $vars)
 	{
-		ob_start();
-		Nette\Utils\LimitedScope::load(str_replace('/', DIRECTORY_SEPARATOR, $file), $vars);
-		return ob_get_clean();
+		return call_user_func(function() {
+			ob_start();
+			foreach (func_get_arg(1) as $__k => $__v) {
+				$$__k = $__v;
+			}
+			unset($__k, $__v);
+			require func_get_arg(0);
+			return ob_get_clean();
+		}, $file, $vars);
 	}
 
 
@@ -218,12 +250,49 @@ class SessionPanel extends Nette\Object implements Nette\Diagnostics\IBarPanel
 		static $periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
 		static $lengths = array("60", "60", "24", "7", "4.35", "12", "10");
 
-		$difference = $seconds > Nette\DateTime::YEAR ? time() - $seconds : $seconds;
+		$difference = $seconds > Nette\Utils\DateTime::YEAR ? time() - $seconds : $seconds;
 		for ($j = 0; $difference >= $lengths[$j]; $j++) {
 			$difference /= $lengths[$j];
 		}
 		$multiply = ($difference = round($difference)) != 1;
 		return "$difference {$periods[$j]}" . ($multiply ? 's' : '');
 	}
+
+
+
+/****************** Registration *********************/
+
+
+
+	/**
+	 * Registers panel to debugger
+	 *
+	 * @param \Tracy\Bar $bar
+	 */
+	public function registerBarPanel(Tracy\Bar $bar)
+	{
+		$bar->addPanel($this);
+	}
+
+
+	/**
+	 * @return Panel
+	 */
+	public static function register(SessionPanel $panel)
+	{
+		$panel->registerBarPanel(static::getDebuggerBar());
+		return $panel;
+	}
+
+
+
+	/**
+	 * @return Bar
+	 */
+	private static function getDebuggerBar()
+	{
+		return method_exists('Tracy\Debugger', 'getBar') ? Tracy\Debugger::getBar() : Tracy\Debugger::$bar;
+	}
+	
 
 }

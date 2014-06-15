@@ -88,7 +88,9 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 			'src' => function ($file) {
 				return \Latte\Runtime\Filters::dataStream(file_get_contents($file));
 			},
-			'esc' => Nette\Utils\Callback::closure('Latte\Runtime\Filters::escapeHtml'),
+			'esc' => Nette\Utils\Callback::closure(function($string) {
+				return htmlspecialchars($string, ENT_QUOTES);
+			}),
 		));
 	}
 
@@ -103,7 +105,9 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 		$url = $this->url;
 		return self::render(__DIR__ . '/templates/panel.phtml', array(
 			'time' => Nette\Utils\Callback::closure(get_called_class() . '::time'),
-			'esc' => Nette\Utils\Callback::closure('Nette\Templating\Helpers::escapeHtml'),
+			'esc' => Nette\Utils\Callback::closure(function($string) {
+				return htmlspecialchars($string, ENT_QUOTES);
+			}),
 			'click' => Nette\Utils\Callback::closure(function ($variable) {
 				if (class_exists('Tracy\Dumper')) {
 					return Tracy\Dumper::toHtml($variable, array(Tracy\Dumper::COLLAPSE => TRUE));

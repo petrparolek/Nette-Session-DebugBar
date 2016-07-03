@@ -38,7 +38,7 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 	public function __construct(Nette\Http\Session $session, IRequest $httpRequest)
 	{
 		$this->session = $session;
-		$this->url = clone $httpRequest->url;
+		$this->url = clone $httpRequest->getUrl();
 		$this->processSignal($httpRequest);
 	}
 
@@ -125,7 +125,7 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 				return (string) $url;
 			},
 			'sections' => $this->createSessionIterator(),
-			'sessionMaxTime' => $this->session->options['gc_maxlifetime'],
+			'sessionMaxTime' => $this->session->getOptions()['gc_maxlifetime'],
 		));
 	}
 

@@ -38,7 +38,7 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 	public function __construct(Nette\Http\Session $session, IRequest $httpRequest)
 	{
 		$this->session = $session;
-		$this->url = clone $httpRequest->url;
+		$this->url = clone $httpRequest->getUrl();
 		$this->processSignal($httpRequest);
 	}
 

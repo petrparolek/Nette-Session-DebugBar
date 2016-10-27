@@ -125,7 +125,7 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 				return (string) $url;
 			},
 			'sections' => $this->createSessionIterator(),
-			'sessionMaxTime' => $this->session->options['gc_maxlifetime'],
+			'sessionMaxTime' => $this->session->getOptions()['gc_maxlifetime'],
 		));
 	}
 
@@ -153,7 +153,7 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 
 			foreach ($_SESSION as $sectionName => $data) {
 				if ($sectionName === '__NF') continue;
-	
+
 				$sections[] = (object) array(
 					'title' => $sectionName,
 					'data' => $data,
@@ -173,7 +173,7 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 	protected function createNetteSessionIterator()
 	{
 		$sections = $this->session->getIterator();
-		
+
 		return new Mapper($sections, function ($sectionName) {
 			$data = $_SESSION['__NF']['DATA'][$sectionName];
 
@@ -272,6 +272,6 @@ class SessionPanel extends Nette\Object implements Tracy\IBarPanel
 	{
 		return method_exists('Tracy\Debugger', 'getBar') ? Tracy\Debugger::getBar() : Tracy\Debugger::$bar;
 	}
-	
+
 
 }

@@ -1,9 +1,9 @@
 <style>
-#nette-debug .nette-sessionPanel h1 {
+#tracy-debug .nette-sessionPanel h1 {
 	min-width: 400px;
 }
 
-#nette-debug .nette-sessionPanel h2 {
+#tracy-debug .nette-sessionPanel h2 {
 	font: 11pt/1.5 sans-serif;
 	margin: 0;
 	padding: 2px 8px;
@@ -11,29 +11,31 @@
 	color: white;
 }
 
-#nette-debug .nette-sessionPanel small {
+#tracy-debug .nette-sessionPanel small {
 	font-size: 70%;
 }
 
-#nette-debug .nette-sessionPanel .nette-inner {
-	width: 700px;
+#tracy-debug .nette-sessionPanel .nette-inner{
+    overflow: auto;
+    max-height: 600px;
+    max-width: 700px;
 }
 
-#nette-debug .nette-sessionPanel table {
+#tracy-debug .nette-sessionPanel table {
 	width: 100%;
 	white-space: nowrap;
 }
 
-#nette-debug .nette-sessionPanel td.nette-session {
+#tracy-debug .nette-sessionPanel td.nette-session {
 	font-weight: bold;
 }
 
-#nette-debug .nette-sessionPanel .section-type {
+#tracy-debug .nette-sessionPanel .section-type {
 	font-size: 85%;
 	color: #999;
 }
 
-#nette-debug .nette-sessionPanel .remove b {
+#tracy-debug .nette-sessionPanel .remove b {
 	line-height: 20px;
 	cursor: pointer;
 	-webkit-appearance: none;
@@ -48,12 +50,12 @@
 	text-decoration: none;
 }
 
-#nette-debug .nette-sessionPanel .remove a:hover {
+#tracy-debug .nette-sessionPanel .remove a:hover {
 	background: transparent;
 	color: #125EAE;
 }
 
-#nette-debug .nette-sessionPanel .remove a:hover span {
+#tracy-debug .nette-sessionPanel .remove a:hover span {
 	text-decoration: underline;
 }
 </style>

@@ -15,8 +15,10 @@ use Tracy;
  * @author Pavel Železný <info@pavelzelezny.cz>
  * @author Filip Procházka <email@filip-prochazka.cz>
  */
-class SessionPanel extends Nette\Object implements Tracy\IBarPanel
+class SessionPanel implements Tracy\IBarPanel
 {
+
+	use Nette\SmartObject;
 
 	const SIGNAL = 'nette-session-panel-delete-session';
 	const SECTION_TYPE = 'section-type';

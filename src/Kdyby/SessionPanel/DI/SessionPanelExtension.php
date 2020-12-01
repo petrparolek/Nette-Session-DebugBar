@@ -17,7 +17,7 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		if ($builder->parameters['debugMode']) {
 			$builder->addDefinition($this->prefix('panel'))
-				->setClass('Kdyby\SessionPanel\Diagnostics\SessionPanel');
+				->setType('Kdyby\SessionPanel\Diagnostics\SessionPanel');
 		}
 	}
 

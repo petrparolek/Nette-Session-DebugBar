@@ -118,8 +118,7 @@ class SessionPanel implements Tracy\IBarPanel
 				}
 			}),
 			'del' => function ($section = NULL, $sectionType = NULL) use ($url) {
-				$url = clone $url;
-				$url->appendQuery(array(
+				$url = $url->withQuery(array(
 					'do' => SessionPanel::SIGNAL,
 					SessionPanel::SIGNAL => $section,
 					SessionPanel::SECTION_TYPE => $sectionType,

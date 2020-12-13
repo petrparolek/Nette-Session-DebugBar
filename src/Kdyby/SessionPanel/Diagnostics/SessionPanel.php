@@ -2,6 +2,7 @@
 
 namespace Kdyby\SessionPanel\Diagnostics;
 
+use Closure;
 use Nette;
 use Nette\Http\IRequest;
 use Nette\Iterators\Mapper;
@@ -90,7 +91,7 @@ class SessionPanel implements Tracy\IBarPanel
 			'src' => function ($file) {
 				return \Latte\Runtime\Filters::dataStream(file_get_contents($file));
 			},
-			'esc' => Nette\Utils\Callback::closure(function($string) {
+			'esc' => Closure::fromCallable(function($string) {
 				return htmlspecialchars($string, ENT_QUOTES);
 			}),
 		));
@@ -106,11 +107,11 @@ class SessionPanel implements Tracy\IBarPanel
 	{
 		$url = $this->url;
 		return self::render(__DIR__ . '/templates/panel.phtml', array(
-			'time' => Nette\Utils\Callback::closure(get_called_class() . '::time'),
-			'esc' => Nette\Utils\Callback::closure(function($string) {
+			'time' => Closure::fromCallable(get_called_class() . '::time'),
+			'esc' => Closure::fromCallable(function($string) {
 				return htmlspecialchars($string, ENT_QUOTES);
 			}),
-			'click' => Nette\Utils\Callback::closure(function ($variable) {
+			'click' => Closure::fromCallable(function ($variable) {
 				if (class_exists('Tracy\Dumper')) {
 					return Tracy\Dumper::toHtml($variable, array(Tracy\Dumper::COLLAPSE => TRUE));
 				} else {

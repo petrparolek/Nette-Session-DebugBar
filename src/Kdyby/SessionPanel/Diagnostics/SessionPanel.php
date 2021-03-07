@@ -70,12 +70,9 @@ class SessionPanel implements Tracy\IBarPanel
 			$this->session->destroy();
 		}
 
-		$query = $httpRequest->getQuery();
-		unset($query['do'], $query[self::SIGNAL], $query[self::SECTION_TYPE]);
-		$this->url->setQuery($query);
-
 		$response = new Nette\Http\Response();
-		$response->redirect($this->url);
+		$refererUrl = $httpRequest->getHeader('referer');
+		$response->redirect($refererUrl);
 		exit(0);
 	}
 

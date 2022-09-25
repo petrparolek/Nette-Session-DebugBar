@@ -15,13 +15,18 @@
 	font-size: 70%;
 }
 
-#tracy-debug .nette-sessionPanel .nette-inner{
-    overflow: auto;
-    max-height: 600px;
-    max-width: 700px;
+#tracy-debug .nette-sessionPanel tr table {
+	margin: 8px 0;
+	max-height: 150px;
+	overflow: auto
 }
 
-#tracy-debug .nette-sessionPanel table {
+#tracy-debug .nette-sessionPanel table pre {
+	display: inline;
+	background: transparent;
+}
+
+#tracy-debug .nette-sessionrPanel table {
 	width: 100%;
 	white-space: nowrap;
 }
@@ -60,8 +65,9 @@
 }
 </style>
 
-<div class="nette-sessionPanel">
-	<h1>Session <small>(Max lifetime: <?php echo $time($sessionMaxTime); ?>)</small></h1>
+<h1>Session <small>(Max lifetime: <?php echo $time($sessionMaxTime); ?>)</small></h1>
+
+<div class="tracy-inner nette-sessionPanel">
 	<div class="nette-inner">
 		<table>
 			<thead><tr><th>Name</th><th>Data</th><th>Expires in</th><th></th></tr></thead>

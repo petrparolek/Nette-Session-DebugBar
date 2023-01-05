@@ -171,7 +171,7 @@ class SessionPanel implements Tracy\IBarPanel
 	 */
 	protected function createNetteSessionIterator()
 	{
-		$sections = $this->session->getIterator();
+		$sections = new \ArrayIterator(array_keys($_SESSION['__NF']['DATA'] ?? []));;
 
 		return new Mapper($sections, function ($sectionName) {
 			$data = $_SESSION['__NF']['DATA'][$sectionName];

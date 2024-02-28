@@ -86,7 +86,11 @@ class SessionPanel implements Tracy\IBarPanel
 	{
 		return self::render(__DIR__ . '/templates/tab.phtml', array(
 			'src' => function ($file) {
-				return \Latte\Runtime\Filters::dataStream(file_get_contents($file));
+				if (method_exists(\Latte\Runtime\Filters::class, 'dataStream')) {
+					return \Latte\Runtime\Filters::dataStream(file_get_contents($file));
+				} else {
+					return \Latte\Essential\Filters::dataStream(file_get_contents($file));
+				}
 			},
 			'esc' => Closure::fromCallable(function($string) {
 				return htmlspecialchars($string, ENT_QUOTES);

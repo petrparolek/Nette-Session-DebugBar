@@ -25,7 +25,7 @@ class SessionPanelExtension extends Nette\DI\CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 		if ($builder->parameters['debugMode']) {
-			$class->methods['initialize']->addBody(
+			$class->getMethods()['initialize']->addBody(
 				'Kdyby\SessionPanel\Diagnostics\SessionPanel::register($this->getService(?));',
 				array($this->prefix('panel'))
 			);
